@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Activity, History, Target } from "lucide-react";
+import { Activity, History, Target, Radio } from "lucide-react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -38,6 +38,19 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-2">
               <History className="w-4 h-4" />
               Session History
+            </div>
+          </Link>
+          <Link
+            href="/calibrate"
+            className={`px-4 py-2 text-sm font-medium transition-colors uppercase tracking-wider ${
+              location === "/calibrate"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Radio className="w-4 h-4" />
+              Calibrate
             </div>
           </Link>
         </nav>

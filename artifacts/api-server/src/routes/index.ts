@@ -6,6 +6,7 @@ import stumpRouter from "./stump.js";
 import deliveriesRouter from "./deliveries.js";
 import wicketsRouter from "./wickets.js";
 import dashboardRouter from "./dashboard.js";
+import calibrateRouter from "./calibrate.js";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use("/stump", stumpRouter);
 router.use("/deliveries", deliveriesRouter);
 router.use("/wickets", wicketsRouter);
 router.use("/dashboard", dashboardRouter);
+router.use("/calibrate", calibrateRouter);
 
 export default router;
