@@ -6,6 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
-  status: string;
-}
+export type TelemetryPayloadPayloadItem = {
+  sensor: string;
+  x: string;
+  y: string;
+  z: string;
+  seconds_elapsed: string;
+};

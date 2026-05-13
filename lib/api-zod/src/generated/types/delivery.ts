@@ -6,6 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
-  status: string;
+export interface Delivery {
+  id: string;
+  session_id: string;
+  pace_kmh: number;
+  is_legal: boolean;
+  trajectory: number[][];
+  timestamp: string;
 }

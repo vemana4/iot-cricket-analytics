@@ -3,20 +3,31 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: QuantumPitch AI – Cricket Analytics API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: session
+    description: Match session management
+  - name: telemetry
+    description: Smartwatch IMU telemetry ingestion
+  - name: stump
+    description: ESP32 Smart Stump data ingestion
+  - name: deliveries
+    description: Delivery records
+  - name: wickets
+    description: Wicket records
+  - name: dashboard
+    description: Dashboard summary
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +35,150 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /session/start:
+    post:
+      operationId: startSession
+      tags: [session]
+      summary: Start a new match session
+      responses:
+        "200":
+          description: Session started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionStartResponse"
+
+  /session/active:
+    get:
+      operationId: getActiveSession
+      tags: [session]
+      summary: Get the currently active session
+      responses:
+        "200":
+          description: Active session or null
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActiveSessionResponse"
+
+  /session/{sessionId}/close:
+    post:
+      operationId: closeSession
+      tags: [session]
+      summary: Close a session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Session closed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CloseSessionResponse"
+
+  /telemetry:
+    post:
+      operationId: ingestTelemetry
+      tags: [telemetry]
+      summary: Ingest smartwatch IMU batch payload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TelemetryPayload"
+      responses:
+        "200":
+          description: Received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngestResponse"
+
+  /stump:
+    post:
+      operationId: ingestStump
+      tags: [stump]
+      summary: Ingest ESP32 Smart Stump data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StumpPayload"
+      responses:
+        "200":
+          description: Received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngestResponse"
+
+  /deliveries:
+    get:
+      operationId: listDeliveries
+      tags: [deliveries]
+      summary: List deliveries for a session
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Delivery list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Delivery"
+
+  /wickets:
+    get:
+      operationId: listWickets
+      tags: [wickets]
+      summary: List wickets for a session
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Wicket list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wicket"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get live dashboard summary for the active session
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +186,147 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    SessionStartResponse:
+      type: object
+      properties:
+        session_id:
+          type: string
+        created_at:
+          type: string
+      required: [session_id, created_at]
+
+    ActiveSessionResponse:
+      type: object
+      properties:
+        session:
+          $ref: "#/components/schemas/Session"
+          nullable: true
+      required: [session]
+
+    CloseSessionResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required: [success]
+
+    Session:
+      type: object
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+        status:
+          type: string
+      required: [id, created_at, status]
+
+    TelemetryPayload:
+      type: object
+      properties:
+        payload:
+          type: array
+          items:
+            type: object
+            properties:
+              sensor:
+                type: string
+              x:
+                type: string
+              y:
+                type: string
+              z:
+                type: string
+              seconds_elapsed:
+                type: string
+            required: [sensor, x, y, z, seconds_elapsed]
+      required: [payload]
+
+    StumpPayload:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [out, not_out]
+        impact_force:
+          type: number
+      required: [status, impact_force]
+
+    IngestResponse:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    Delivery:
+      type: object
+      properties:
+        id:
+          type: string
+        session_id:
+          type: string
+        pace_kmh:
+          type: number
+        is_legal:
+          type: boolean
+        trajectory:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+        timestamp:
+          type: string
+      required: [id, session_id, pace_kmh, is_legal, trajectory, timestamp]
+
+    Wicket:
+      type: object
+      properties:
+        id:
+          type: string
+        session_id:
+          type: string
+        status:
+          type: string
+        impact_force:
+          type: number
+        timestamp:
+          type: string
+      required: [id, session_id, status, impact_force, timestamp]
+
+    DashboardSummary:
+      type: object
+      properties:
+        session:
+          $ref: "#/components/schemas/Session"
+          nullable: true
+        total_deliveries:
+          type: integer
+        avg_pace_kmh:
+          type: number
+        max_pace_kmh:
+          type: number
+        total_wickets:
+          type: integer
+        legal_deliveries:
+          type: integer
+        recent_deliveries:
+          type: array
+          items:
+            $ref: "#/components/schemas/Delivery"
+        recent_wickets:
+          type: array
+          items:
+            $ref: "#/components/schemas/Wicket"
+      required:
+        - session
+        - total_deliveries
+        - avg_pace_kmh
+        - max_pace_kmh
+        - total_wickets
+        - legal_deliveries
+        - recent_deliveries
+        - recent_wickets

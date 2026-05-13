@@ -5,7 +5,9 @@
  * QuantumPitch AI – Cricket Analytics API
  * OpenAPI spec version: 0.1.0
  */
+import type { StumpPayloadStatus } from "./stumpPayloadStatus";
 
-export interface HealthStatus {
-  status: string;
+export interface StumpPayload {
+  status: StumpPayloadStatus;
+  impact_force: number;
 }

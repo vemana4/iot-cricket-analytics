@@ -6,6 +6,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface HealthStatus {
+export interface Wicket {
+  id: string;
+  session_id: string;
   status: string;
+  impact_force: number;
+  timestamp: string;
 }
