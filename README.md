@@ -6,7 +6,7 @@
 [![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)](https://expressjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-IoT-powered smart cricket stump system providing real-time ball tracking and pitch analytics using ESP32, Node.js, and React.
+The IoT Cricket Analytics platform is an advanced, end-to-end hardware and software solution engineered to modernize cricket training and match analysis. At its core, it leverages ESP32 microcontrollers equipped with specialized IMU and piezoelectric sensors mounted directly on cricket stumps. These sensors capture high-fidelity impact data—including force, angle, and vibration signatures—the instant a ball strikes the wicket. This telemetry is streamed in real-time to a robust Express.js ingestion API, which reconstructs the ball's trajectory and classifies the delivery using a custom physics engine. Finally, coaches and players can review the data through a high-performance React dashboard featuring WebGL-accelerated 3D visualizations, empowering them to make data-driven decisions to improve bowling accuracy and pitch strategy.
 
 ---
 
