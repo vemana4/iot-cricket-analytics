@@ -1,4 +1,4 @@
-# 🏏 Smart Cricket IoT
+# IoT Cricket Analytics
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev)
@@ -6,7 +6,7 @@
 [![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)](https://expressjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An end-to-end IoT-powered smart cricket stump system that captures real-time ball impact data using ESP32 sensors, streams telemetry through a Node.js ingestion API, and visualizes pitch analytics on an interactive React dashboard with WebGL-accelerated graphics.
+IoT-powered smart cricket stump system providing real-time ball tracking and pitch analytics using ESP32, Node.js, and React.
 
 ---
 
